@@ -3,8 +3,11 @@
 # Toontown Stride
 September build of Toontown Stride, that just works.
 
+# ❓ What is Toontown Stride
+Toontown Stride is a Community Focused Toontown Server. We are going to keep up this tradition finishing and polishing Toontown Stride for the community.
 # 🔨 Setting Up
 
+Support is currently being worked on for MacOS and Non Arch Based Linux Distros
 ## 💻 Windows
 
 ### Installing Panda
@@ -17,11 +20,7 @@ ppython -m pip install -r requirements.txt
 ```
 
 ### Running the Game
-Now run the [Localhost.hta](Localhost.hta) or [Localhost.exe](Localhost.exe) file to Locally Run The Game
-To Connect to an hosted server you can use [Connect.hta](Connect.hta) or [Connect.exe](Connect.exe)
-
-Alternatively you can navigate to `dev/win32` and open [start-ai-server.bat](start-ai-server.bat), [start-astron-cluser.bat](start-astron-cluser.bat), and [start-uberdog-server.bat](start-uberdog-server.bat)
-Furthermore from here to open the Client run [start-game.bat](start-game.bat) and if your locally connecting run [start-game-localhost.bat](start-game-localhost.bat)
+Now run the [Start.bat](Start.bat) file to launch the game.
 
 ## 🐧 Linux
 ### Gathering Basic Dependencies
@@ -60,6 +59,5 @@ sudo python2 makepanda/installpanda.py
 sudo ldconfig
 ```
 
-#### Running the Game
-Now you can navigate to `dev/liun` and open [start-ai-server.sh](start-ai-server.sh), [start-astron-cluser.sh](start-astron-cluser.sh), and [start-uberdog-server.sh](start-uberdog-server.sh)
-Furthermore from here to open the Client run [start-game.bat](start-game.bat) and if your locally connecting run [start-game-localhost.bat](start-game-localhost.bat)
+### Running the Game
+Now run the [Start.sh](Start.sh) file to launch the game.
