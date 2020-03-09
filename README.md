@@ -61,3 +61,10 @@ sudo ldconfig
 
 ### Running the Game
 Now run the [Start.sh](Start.sh) file to launch the game.
+
+# 📝 Notice
+
+This repository contains code derived from the [BigNed repository.](https://github.com/BigNed/ToontownStride)
+
+BigNed is operated by rocketprogrammer, toonjoey, Jeeperpretzel, and EliasTDev.
+
