@@ -30,16 +30,16 @@ Now run the [Start.bat](Start.bat) file to launch the game.
 ##### Debian / Ubuntu / Linux Mint
 ```sudo apt-get install build-essential xterm pkg-config fakeroot python-dev libpng-dev libjpeg-dev libtiff-dev zlib1g-dev libssl-dev libx11-dev libgl1-mesa-dev libxrandr-dev libxxf86dga-dev libxcursor-dev bison flex libfreetype6-dev libvorbis-dev libeigen3-dev libopenal-dev libode-dev libbullet-dev nvidia-cg-toolkit libgtk2.0-dev libassimp-dev libopenexr-dev```
 
-### Getting Python
+### Getting Python 2
 
-The First step to get this Source running is compiling Python. The Python we use is located [here](https://github.com/NormalNed/python) but feel free to use the one in your package manager (should be **python2**)
+The First step to get this Source running is obtaining a version of Python 2. The Python we use is located [here](https://github.com/NormalNed/python) but feel free to use the one in your package manager (should be **python2**)
 
 ### Installing Pip
 
 Once you get the Python installed you need to type these following commands to install Pip
 ```bash
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python get-pip.py
+python2 get-pip.py
 ```
 
 ### Installing Pip Dependencies
