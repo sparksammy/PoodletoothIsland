@@ -6,6 +6,7 @@ from toontown.toon import ToonHead
 from toontown.toontowngui import TTDialog
 from direct.gui.DirectGui import *
 from toontown.toonbase import TTLocalizer
+from toontown.distributed.DiscordRPC import *
 from direct.directnotify import DirectNotifyGlobal
 NAME_ROTATIONS = (7, -11, 1, -5, 3.5, -5)
 NAME_POSITIONS = ((0, 0, 0.26),
@@ -30,6 +31,7 @@ class AvatarChoice(DirectButton):
         DirectButton.__init__(self, relief=None, text='', text_font=ToontownGlobals.getSignFont())
         self.initialiseoptions(AvatarChoice)
         self.mode = None
+        Discord.AvChoice()
         if not av:
             self.mode = AvatarChoice.MODE_CREATE
             self.name = ''

@@ -15,6 +15,7 @@ from toontown.toonbase.ToontownGlobals import *
 from toontown.building import ToonInterior
 from toontown.hood import QuietZoneState
 from toontown.dna.DNAParser import *
+from toontown.distributed.DiscordRPC import *
 from direct.stdpy.file import *
 
 class SafeZoneLoader(StateData.StateData):
@@ -74,6 +75,7 @@ class SafeZoneLoader(StateData.StateData):
         self.fsm.request(stateName, [requestStatus])
 
     def createSafeZone(self, dnaFile):
+        Discord.setZone(self.hood.id)
         if self.safeZoneStorageDNAFile:
             dnaBulk = DNABulkLoader(self.hood.dnaStore, (self.safeZoneStorageDNAFile,))
             dnaBulk.loadDNAFiles()

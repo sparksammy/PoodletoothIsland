@@ -8,7 +8,6 @@ from direct.interval.IntervalGlobal import *
 from direct.task import Task
 from panda3d.core import *
 import random
-
 import BodyShop
 import ColorShop
 import GenderShop
@@ -24,6 +23,7 @@ from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TTDialog
+from toontown.distributed.DiscordRPC import *
 
 
 class MakeAToon(StateData.StateData):
@@ -94,6 +94,7 @@ class MakeAToon(StateData.StateData):
         self.notify.debug('Starting Make A Toon.')
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: MAKEATOON: Starting Make A Toon')
+        Discord.Making()
         base.camLens.setMinFov(ToontownGlobals.MakeAToonCameraFov/(4./3.))
         base.playMusic(self.music, looping=1, volume=self.musicVolume)
         camera.setPosHpr(-5.7, -12.3501, 2.15, -24.8499, 2.73, 0)

@@ -26,6 +26,7 @@ from toontown.hood import PartyHood
 from toontown.toonbase import TTLocalizer
 from toontown.parties.PartyGlobals import GoToPartyStatus
 from toontown.dna.DNAParser import *
+from toontown.distributed.DiscordRPC import *
 
 class PlayGame(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('PlayGame')
@@ -108,6 +109,7 @@ class PlayGame(StateData.StateData):
         return
 
     def enter(self, hoodId, zoneId, avId):
+        Discord.setZone(zoneId)
         if hoodId == ToontownGlobals.Tutorial:
             loaderName = 'townLoader'
             whereName = 'toonInterior'
@@ -127,6 +129,7 @@ class PlayGame(StateData.StateData):
           'zoneId': zoneId,
           'shardId': None,
           'avId': avId}])
+        Discord.setZone(zoneId)        
         return
 
     def exit(self):
@@ -228,6 +231,8 @@ class PlayGame(StateData.StateData):
         toHoodPhrase = ToontownGlobals.hoodNameMap[canonicalHoodId][0]
         hoodName = ToontownGlobals.hoodNameMap[canonicalHoodId][-1]
         zoneId = requestStatus['zoneId']
+        self.zoneids = zoneId
+        Discord.setZone(zoneId)
         loaderName = requestStatus['loader']
         avId = requestStatus.get('avId', -1)
         ownerId = requestStatus.get('ownerId', avId)

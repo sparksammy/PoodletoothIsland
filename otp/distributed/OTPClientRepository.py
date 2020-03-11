@@ -21,6 +21,7 @@ from otp.nametag.NametagConstants import *
 import sys, time, types, random
 from random import *
 from toontown.toonbase.PythonUtil import choice
+from toontown.distributed.DiscordRPC import DiscordRPC
 import __builtin__
 
 class OTPClientRepository(ClientRepositoryBase):
@@ -663,6 +664,7 @@ class OTPClientRepository(ClientRepositoryBase):
     def enterAfkTimeout(self):
         self.sendSetAvatarIdMsg(0)
         msg = OTPLocalizer.AfkForceAcknowledgeMessage
+        Discord.setData(details="I'm Sleeping", image="logo", imageTxt="AFK")
         dialogClass = OTPGlobals.getDialogClass()
         self.afkDialog = dialogClass(text=msg, command=self.__handleAfkOk, style=OTPDialog.Acknowledge)
         self.handler = self.handleMessageType
@@ -945,6 +947,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
         self.playGame.enter(hoodId, zoneId, avId)
 
+
         def checkScale(task):
             return Task.cont
 
@@ -965,6 +968,7 @@ class OTPClientRepository(ClientRepositoryBase):
              avId])
         else:
             self.notify.error('Exited shard with unexpected mode %s' % how)
+        Discord.setDistrict(base.cr.activeDistrictMap[shardId].name)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def exitPlayGame(self):
@@ -1035,6 +1039,7 @@ class OTPClientRepository(ClientRepositoryBase):
          zoneId,
          avId]
         localAvatar.setLeftDistrict()
+        Discord.setDistrict(base.cr.activeDistrictMap[shardId].name)
         self.removeShardInterest(self._handleOldShardGone)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
@@ -1065,7 +1070,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
         if district:
             self.notify.debug('chose %s: pop %s' % (district.name, district.avatarCount))
-
+            Discord.setDistrict(district.name)
         return district
 
     def getShardName(self, shardId):

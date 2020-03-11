@@ -20,6 +20,7 @@ from toontown.building import ToonInterior
 from toontown.hood import QuietZoneState, ZoneUtil, HydrantInteractiveProp, MailboxInteractiveProp, TrashcanInteractiveProp
 from direct.interval.IntervalGlobal import *
 from toontown.dna.DNAParser import DNABulkLoader
+from toontown.distributed.DiscordRPC import *
 
 class TownLoader(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownLoader')
@@ -47,6 +48,7 @@ class TownLoader(StateData.StateData):
 
     def load(self, zoneId):
         self.zoneId = zoneId
+        Discord.setZone(zoneId)
         self.parentFSMState.addChild(self.fsm)
         self.loadBattleAnims()
         self.branchZone = ZoneUtil.getBranchZone(zoneId)

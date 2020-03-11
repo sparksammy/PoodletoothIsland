@@ -131,6 +131,14 @@ ToonBase.ToonBase()
 from panda3d.core import *
 if base.win is None:
     notify.error('Unable to open window; aborting.')
+try:
+    import __builtin__
+except:
+    import builtins
+    __builtin__ = builtins
+from toontown.distributed.DiscordRPC import DiscordRPC
+__builtin__.Discord = DiscordRPC()
+Discord.Launching()
 ConfigVariableDouble('decompressor-step-time').setValue(0.01)
 ConfigVariableDouble('extractor-step-time').setValue(0.01)
 backgroundNodePath = aspect2d.attachNewNode(backgroundNode, 0)
@@ -197,6 +205,7 @@ autoRun = ConfigVariableBool('toontown-auto-run', 1)
 
 gc.enable()
 gc.collect()
+Discord.StartTasks()
 
 if autoRun:
     try:
