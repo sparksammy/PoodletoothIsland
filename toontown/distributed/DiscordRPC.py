@@ -1,6 +1,9 @@
 import time
 from ctypes import * # Used to interact with DLL
 from direct.task import Task # Used to manage the Callback timer
+from sys import platform
+import os
+import string
 
 class DiscordRPC:
     zone2imgdesc = { # A dict of ZoneID -> An image and a description
@@ -72,88 +75,127 @@ class DiscordRPC:
    }
     
     def __init__(self):
-        self.CodeHandle = cdll.LoadLibrary("SDK.dll") # Load the RP code
-        self.CodeHandle.DLLMain()
-        self.UpdateTask = None
-        self.details = "Loading" # The writing next to the photo
-        self.image = "stride" #The main photo
-        self.imageTxt = "Toontown Stride" # Hover text for the main photo
-        self.smallLogo = "null" # Small photo in corner
-        self.state = "" # Displayed underneath details - used for boarding groups
-        self.smallTxt = "Loading" # null this out
-        self.PartySize = 0
-        self.MaxParty = 0
+        if platform == "win32":
+            self.CodeHandle = cdll.LoadLibrary("SDK.dll") # Load the RP code
+            self.CodeHandle.DLLMain()
+            self.UpdateTask = None
+            self.details = "Loading" # The writing next to the photo
+            self.image = "stride" #The main photo
+            self.imageTxt = "Toontown Stride" # Hover text for the main photo
+            self.smallLogo = "null" # Small photo in corner
+            self.state = "" # Displayed underneath details - used for boarding groups
+            self.smallTxt = "Loading" # null this out
+            self.PartySize = 0
+            self.MaxParty = 0
+        elif platform == "linux":
+            pass
 
     def stopBoarding(self):  #Boarding groups :D
-        self.PartySize = 0
-        self.state = ""
-        self.MaxParty = 0
-        self.setData()
+        if platform == "win32":
+            self.PartySize = 0
+            self.state = ""
+            self.MaxParty = 0
+            self.setData()
+        elif platform == "linux":
+            pass
 
     def AllowBoarding(self, size):
-        self.state = "In A Boarding Group"
-        self.PartySize = 1
-        self.MaxParty = size
-        self.setData()
+        if platform == "win32":
+            self.state = "In A Boarding Group"
+            self.PartySize = 1
+            self.MaxParty = size
+            self.setData()
+        elif platform == "linux":
+            pass
 
     def setBoarding(self, size): # Sets how many members are in a boarding group
-        self.PartySize = size
-        self.setData()
+        if platform == "win32":
+            self.PartySize = size
+            self.setData()
+        elif platform == "linux":
+            pass
 
     def setData(self): # Manually update all vars
-        self.CodeHandle.DoCallbacks()
-        details = self.details
-        image = self.image
-        imageTxt = self.imageTxt
-        smallLogo = self.smallLogo
-        smallTxt = self.smallTxt
-        state = self.state
-        party = self.PartySize
-        maxSize = self.MaxParty
-        self.CodeHandle.SetData(details.encode('utf_8'), state.encode('utf_8'), smallLogo.encode('utf_8'), smallTxt.encode('utf_8'), image.encode('utf_8'), imageTxt.encode('utf_8'), maxSize, party)
+        if platform == "win32":        
+            self.CodeHandle.DoCallbacks()
+            details = self.details
+            image = self.image
+            imageTxt = self.imageTxt
+            smallLogo = self.smallLogo
+            smallTxt = self.smallTxt
+            state = self.state
+            party = self.PartySize
+            maxSize = self.MaxParty
+            self.CodeHandle.SetData(details.encode('utf_8'), state.encode('utf_8'), smallLogo.encode('utf_8'), smallTxt.encode('utf_8'), image.encode('utf_8'), imageTxt.encode('utf_8'), maxSize, party)
+        elif platform == "linux":
+            pass
 
     def DoCallbacks(self, task): # Recieves any messages from discord and handles them
-        self.CodeHandle.DoCallbacks()
-        return task.again
+        if platform == "win32":
+            self.CodeHandle.DoCallbacks()
+            return task.again
+        elif platform == "linux":
+            pass
 
     def UpdateTasks(self, task):
-        self.UpdateTask = True
-        self.setData()
-        return task.again
+        if platform == "win32":        
+            self.UpdateTask = True
+            self.setData()
+            return task.again
+        elif platform == "linux":
+            pass
 
     def AvChoice(self): # Call in pick-a-toon
-        self.image = "stride"
-        self.details = "Picking A Toon"
-        self.setData()
+        if platform == "win32":           
+            self.image = "stride"
+            self.details = "Picking A Toon"
+            self.setData()
+        elif platform == "linux":
+            pass
 
     def Launching(self): # Call When loading game - toontownstart
-        self.image = "stride"
-        self.details = "Loading"
-        self.setData()
+        if platform == "win32":
+            self.image = "stride"
+            self.details = "Loading"
+            self.setData()
+        elif platform == "linux":
+            pass
 
     def Making(self): # Call in make-a-toon
-        self.image = "stride"
-        self.details = "Making A Toon"
-        self.setData()
+        if platform == "win32":
+            self.image = "stride"
+            self.details = "Making A Toon"
+            self.setData()
+        elif platform == "linux":
+            pass
 
     def StartTasks(self): # Call JUST before base.run() in toontown-start
-        taskMgr.doMethodLater(10, self.UpdateTasks, 'UpdateTask')
-        taskMgr.doMethodLater(0.016, self.DoCallbacks, 'RPC-Callbacks')
+        if platform == "win32":
+            taskMgr.doMethodLater(10, self.UpdateTasks, 'UpdateTask')
+            taskMgr.doMethodLater(0.016, self.DoCallbacks, 'RPC-Callbacks')
+        elif platform == "linux":
+            pass
 
     def setZone(self,Zone): # Set image and text based on the zone
-        self.smallLogo = "globe" # Small photo in corner
-        self.state = "" # Displayed underneath details - used for boarding groups
-        self.smallTxt = "Loading" # null this out
-        if not isinstance(Zone, int):
-            return
-        Zone -= Zone % 100
-        data = self.zone2imgdesc.get(Zone,None)
-        if data:
-            self.image = data[0]
-            self.details = data[1]
-            self.setData()
-        else:
-            print("Error: Zone Not Found!")
+        if platform == "win32":
+            self.smallLogo = "globe" # Small photo in corner
+            self.state = "" # Displayed underneath details - used for boarding groups
+            self.smallTxt = "Loading" # null this out
+            if not isinstance(Zone, int):
+                return
+            Zone -= Zone % 100
+            data = self.zone2imgdesc.get(Zone,None)
+            if data:
+                self.image = data[0]
+                self.details = data[1]
+                self.setData()
+            else:
+                print("Error: Zone Not Found!")
+        elif platform == "linux":
+            pass
 
     def setDistrict(self,Name): # Set the image text the district name
-        self.smallTxt = Name
+        if platform == "win32":
+            self.smallTxt = Name
+        elif platform == "linux":
+            pass
