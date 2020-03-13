@@ -5,6 +5,7 @@ from direct.distributed import DistributedObject
 from direct.distributed import DistributedSmoothNode
 from direct.distributed.ClockDelta import *
 from direct.distributed.MsgTypes import *
+from direct.showbase.InputStateGlobal import inputState
 from direct.fsm import ClassicFSM
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval
 from direct.showbase import PythonUtil
@@ -2390,6 +2391,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if not self.isReported(doId):
             self.reported.append(doId)
     
+    def setRun(self):
+        if self.isLocal():
+            inputState.set('debugRunning', inputState.isSet('debugRunning') is not True)
+
     def setFriendsList(self, friendsList):
         DistributedPlayer.DistributedPlayer.setFriendsList(self, friendsList)
         messenger.send('friendsListChanged')
