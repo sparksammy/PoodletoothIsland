@@ -3,6 +3,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.filter.CommonFilters import CommonFilters
 from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
+from direct.showbase.InputStateGlobal import inputState
 from direct.showbase.PythonUtil import *
 from direct.showbase.Transitions import Transitions
 from direct.task import *
@@ -148,9 +149,12 @@ class ToonBase(OTPBase.OTPBase):
         del tpMgr
         self.lastScreenShotTime = globalClock.getRealTime()
         self.accept('InputState-forward', self.__walking)
+        self.accept('shift', self.setSprinting)
+        self.accept('shift-up', self.exitSprinting)
         self.canScreenShot = 1
         self.glitchCount = 0
         self.walking = 0
+        self.isSprinting = 1
         self.oldX = max(1, base.win.getXSize())
         self.oldY = max(1, base.win.getYSize())
         self.aspectRatio = float(self.oldX) / self.oldY
@@ -188,6 +192,23 @@ class ToonBase(OTPBase.OTPBase):
     def __walking(self, pressed):
         self.walking = pressed
 
+    def setSprinting(self):
+        if self.walking:
+            base.localAvatar.currentSpeed = OTPGlobals.ToonForwardSprintSpeed
+            base.localAvatar.currentReverseSpeed = OTPGlobals.ToonReverseSprintSpeed
+            base.localAvatar.controlManager.setSpeeds(OTPGlobals.ToonForwardSprintSpeed, OTPGlobals.ToonJumpForce, OTPGlobals.ToonReverseSprintSpeed, OTPGlobals.ToonRotateSpeed)
+            self.isSprinting = 1
+        else:
+            if self.isSprinting == 1:
+                self.exitSprinting()
+
+    def exitSprinting(self):
+        if hasattr(base, 'localAvatar'):
+            base.localAvatar.currentSpeed = OTPGlobals.ToonForwardSpeed
+            base.localAvatar.currentReverseSpeed = OTPGlobals.ToonReverseSpeed
+            base.localAvatar.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce, OTPGlobals.ToonReverseSpeed, OTPGlobals.ToonRotateSpeed)
+            self.isSprinting = 0
+    
     def toggleGui(self):
         if aspect2d.isHidden():
             aspect2d.show()

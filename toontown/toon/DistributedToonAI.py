@@ -4035,6 +4035,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setAwardNotify(self, awardNotify):
         self.awardNotify = awardNotify
+        
+    def d_setRun(self):
+        self.sendUpdate('setRun', [])
 
     def teleportResponseToAI(self, toAvId, available, shardId, hoodId, zoneId, fromAvId):
         senderId = self.air.getAvatarIdFromSender()
