@@ -173,22 +173,38 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         for lawyer in self.lawyers:
             lawyer.doNextAttack(self)
 
-        self.waitForNextAttack(ToontownGlobals.LawbotBossLawyerCycleTime)
+        if config.GetBool('want-scale-practice', True):
+            self.waitForNextAttack(ToontownGlobals.LawbotBossStunTrainCycle)
+        else:
+            self.waitForNextAttack(ToontownGlobals.LawbotBossLawyerCycleTime)
         timeSinceLastAttack = globalClock.getFrameTime() - self.lastAreaAttackTime
         allowedByTime = 15 < timeSinceLastAttack or self.lastAreaAttackTime == 0
         doAttack = random.randrange(1,101)
         self.notify.debug('allowedByTime=%d doAttack=%d' % (allowedByTime, doAttack))
-        if doAttack <= ToontownGlobals.LawbotBossChanceToDoAreaAttack and allowedByTime:
-            self.__doAreaAttack()
-            self.numAreaAttacks += 1
-            self.lastAreaAttackTime = globalClock.getFrameTime()
+        if config.GetBool('want-scale-practice', True):
+            if doAttack <= ToontownGlobals.LawbotBossStunTrainingChanceToDoAreaAttack and allowedByTime:
+                self.__doAreaAttack()
+                self.numAreaAttacks += 1
+                self.lastAreaAttackTime = globalClock.getFrameTime()
+            else:
+                chanceToDoTaunt = ToontownGlobals.LawbotBossChanceForTaunt
+                action = random.randrange(1,101)
+                if action <= chanceToDoTaunt:
+                    self.doTaunt()
+                    pass
+            return
         else:
-            chanceToDoTaunt = ToontownGlobals.LawbotBossChanceForTaunt
-            action = random.randrange(1,101)
-            if action <= chanceToDoTaunt:
-                self.doTaunt()
-                pass
-        return
+            if doAttack <= ToontownGlobals.LawbotBossChanceToDoAreaAttack and allowedByTime:
+                self.__doAreaAttack()
+                self.numAreaAttacks += 1
+                self.lastAreaAttackTime = globalClock.getFrameTime()
+            else:
+                chanceToDoTaunt = ToontownGlobals.LawbotBossChanceForTaunt
+                action = random.randrange(1,101)
+                if action <= chanceToDoTaunt:
+                    self.doTaunt()
+                    pass
+            return
         if self.attackCode == ToontownGlobals.BossCogDizzyNow:
             attackCode = ToontownGlobals.BossCogRecoverDizzyAttack
         else:
@@ -517,7 +533,14 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         self.waitForNextAttack(5)
         self.notify.debug('battleDifficulty = %d' % self.battleDifficulty)
         self.numToonsAtStart = len(self.involvedToons)
-
+        if config.GetBool('want-scale-practice', True):
+            self.__deleteChairs()
+            for gavel in self.gavels:
+                gavel.request('Off')
+                gavel.requestDelete()
+        else:
+            pass
+#
     def getToonDifficulty(self):
         totalCogSuitTier = 0
         totalToons = 0
@@ -834,17 +857,31 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
             self.bonusState = False
 
     def startBonusState(self):
-        self.notify.debug('startBonusState')
-        self.bonusTimeStarted = globalClock.getFrameTime()
-        self.bonusState = True
-        self.numBonusStates += 1
-        for toonId in self.involvedToons:
-            toon = self.air.doId2do.get(toonId)
-            if toon:
-                self.healToon(toon, ToontownGlobals.LawbotBossBonusToonup)
+        if config.GetBool('want-scale-practice', True):
+            self.notify.debug('startBonusState')
+            self.bonusTimeStarted = globalClock.getFrameTime()
+            self.bonusState = True
+            self.numBonusStates += 1
+            for toonId in self.involvedToons:
+                toon = self.air.doId2do.get(toonId)
+                if toon:
+                    self.healToon(toon, ToontownGlobals.LawbotBossBonusToonup)
 
-        taskMgr.doMethodLater(ToontownGlobals.LawbotBossBonusDuration, self.clearBonus, self.uniqueName('clearBonus'))
-        self.sendUpdate('enteredBonusState', [])
+                taskMgr.doMethodLater(ToontownGlobals.LawbotBossBonusDuration, self.clearBonus, self.uniqueName('clearBonus'))
+                self.sendUpdate('enteredBonusState', [])
+        else:
+            if config.GetBool('want-scale-practice', True):
+                self.notify.debug('startBonusState')
+                self.bonusTimeStarted = globalClock.getFrameTime()
+                self.bonusState = True
+                self.numBonusStates += 1
+                for toonId in self.involvedToons:
+                    toon = self.air.doId2do.get(toonId)
+                    if toon:
+                        self.healToon(toon, ToontownGlobals.LawbotBossBonusToonup)
+
+                    taskMgr.doMethodLater(ToontownGlobals.LawbotBossStunTrainingBonusDuration, self.clearBonus, self.uniqueName('clearBonus'))
+                    self.sendUpdate('enteredBonusState', [])
 
     def areAllLawyersStunned(self):
         for lawyer in self.lawyers:
@@ -860,8 +897,16 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
             return
         curTime = globalClock.getFrameTime()
         delta = curTime - self.bonusTimeStarted
-        if ToontownGlobals.LawbotBossBonusWaitTime < delta:
-            self.startBonusState()
+        if config.GetBool('want-scale-practice', True):
+            if ToontownGlobals.LawbotBossStunTrainingBonusWaitTime < delta:
+                self.startBonusState()
+            else:
+                pass
+        else:
+            if ToontownGlobals.LawbotBossBonusWaitTime < delta:
+                self.startBonusState()
+            else:
+                pass
 
     def toonEnteredCannon(self, toonId, cannonIndex):
         self.cannonIndexPerToon[toonId] = cannonIndex
@@ -941,3 +986,21 @@ def killCJ():
         return "You aren't in a CJ"
     boss.b_setState('Victory')
     return 'Killed CJ.'
+
+@magicWord(category=CATEGORY_ADMINISTRATOR)
+def rsc():
+    """
+    Restarts the scale round.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedLawbotBossAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a CJ"
+    boss.exitIntroduction()
+    boss.b_setState('BattleThree')
+    return "Restarting Scale Round"

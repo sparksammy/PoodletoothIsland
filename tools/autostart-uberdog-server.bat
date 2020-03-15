@@ -23,4 +23,5 @@ set BASE_CHANNEL=1000000
 	--stateserver %STATESERVER% ^
 	--astron-ip %ASTRON_IP% ^
 	--eventlogger-ip %EVENTLOGGER_IP%
+PAUSE
 goto main

@@ -75,7 +75,10 @@ class DistributedLawbotBossSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
     def doNextAttack(self, lawbotBoss):
         if self.stunned:
             return
-        chanceToDoAttack = ToontownGlobals.LawbotBossLawyerChanceToAttack
+        if config.GetBool('want-scale-practice', True):
+            chanceToDoAttack = ToontownGlobals.LawbotBossStunTrainingNoAttack
+        else:
+            chanceToDoAttack = ToontownGlobals.LawbotBossLawyerChanceToAttack
         action = random.randrange(1, 101)
         if action > chanceToDoAttack:
             self.doProsecute()

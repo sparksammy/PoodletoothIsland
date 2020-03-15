@@ -1702,3 +1702,11 @@ TELEPORT_BUTTON_COSTS = {
 
 def getTeleportButtonCost(hoodId):
     return TELEPORT_BUTTON_COSTS.get(hoodId, TELEPORT_BUTTON_DEFAULT_COST)
+
+LawbotBossStunTrainCycle = 999999999 #Stun Training
+LawbotBossStunTrainingNoAttack = 100 #Stun Training
+LawbotBossStunTrainingInjusticeScale = (0.0001, 0.0001, 0.0001) #Stun Training
+LawbotBossStunTrainingBonusWaitTime = 5 #Stun Training
+LawbotBossStunTrainingBonusDuration = 5 #Stun Training
+LawbotBossStunTrainingBonusToonup = 69 #Stun Training
+LawbotBossStunTrainingChanceToDoAreaAttack = 0 #Stun Trainingsd

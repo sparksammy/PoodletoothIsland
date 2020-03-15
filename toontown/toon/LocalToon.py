@@ -154,6 +154,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.questMap = None
             self.prevToonIdx = 0
             self.houseType = 0
+            if config.GetBool('want-scale-practice', True):
+                self.camStart = [0, 0, 0, 0, 0, 0]
+                self.camPoints = []
+                self.camera = camera
+            else:
+                pass
 
     def setDNA(self, dna):
         base.localAvatarStyle = dna
@@ -614,7 +620,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def __pieInHand(self):
         pie = self.pieTracks.get(self.__pieSequence)
-        return pie and pie.getT() < 15.0 / 24.0
+        if config.GetBool('want-scale-practice', True):
+            return pie and pie.getT() < 0.59
+        else:
+            return pie and pie.getT() < 15.0 / 24.0
 
     def __toonMoved(self, isSet):
         if isSet:

@@ -224,7 +224,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return
 
     def setBossDamage(self, bossDamage, recoverRate, timestamp):
-        self.bossHealthBar.update(self.bossMaxDamage - bossDamage, self.bossMaxDamage)
         recoverStartTime = globalClockDelta.networkToLocalTime(timestamp)
         self.bossDamage = bossDamage
         self.recoverRate = recoverRate
@@ -240,6 +239,10 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 if self.recoverRate:
                     taskMgr.add(self.__recoverBossDamage, taskName)
         self.makeScaleReflectDamage()
+        if config.GetBool('want-scale-practice', False):
+            self.bossHealthBar.update(self.bossMaxDamage - bossDamage, self.bossMaxDamage)
+        else:
+            pass
 
     def getBossDamage(self):
         self.notify.debug('----- getBossDamage')
@@ -536,7 +539,10 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('beamLocatorPos = %s' % beamLocatorPos)
         self.notify.debug('negBeamLocatorPos = %s' % negBeamLocatorPos)
         self.beamNodePath.setPos(beamLocatorPos)
-        self.scaleNodePath.setScale(*ToontownGlobals.LawbotBossInjusticeScale)
+        if config.GetBool('want-scale-practice', True):
+            self.scaleNodePath.setScale(*ToontownGlobals.LawbotBossStunTrainingInjusticeScale)
+        else:
+            self.scaleNodePath.setScale(*ToontownGlobals.LawbotBossInjusticeScale)
         self.scaleNodePath.wrtReparentTo(self.geom)
         self.baseHighCol = self.scaleNodePath.find('**/BaseHighCol')
         oldBitMask = self.baseHighCol.getCollideMask()
@@ -1747,6 +1753,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.notify.warning('returning from setTaunt, no attr state')
             gotError = True
         elif not self.state == 'BattleThree':
+            loader.playMusic(self.battleThreeMusic, looping=1, volume=0.9)
             self.notify.warning('returning from setTaunt, not in battle three state, state=%s', self.state)
             gotError = True
         if not hasattr(self, 'nametag'):
@@ -1777,15 +1784,26 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.bonusTimer.hide()
 
     def enteredBonusState(self):
-        self.witnessToon.clearChat()
-        text = TTLocalizer.WitnessToonBonus % (ToontownGlobals.LawbotBossBonusWeightMultiplier, ToontownGlobals.LawbotBossBonusDuration)
-        self.witnessToon.setChatAbsolute(text, CFSpeech | CFTimeout)
-        base.playSfx(self.toonUpSfx)
-        if not self.bonusTimer:
-            self.bonusTimer = ToontownTimer.ToontownTimer()
-            self.bonusTimer.posInTopRightCorner()
-        self.bonusTimer.show()
-        self.bonusTimer.countdown(ToontownGlobals.LawbotBossBonusDuration, self.hideBonusTimer)
+        if config.GetBool('want-scale-practice', True):
+            self.witnessToon.clearChat()
+            text = TTLocalizer.WitnessToonBonus % (ToontownGlobals.LawbotBossBonusWeightMultiplier, ToontownGlobals.LawbotBossStunTrainingBonusDuration)
+            self.witnessToon.setChatAbsolute(text, CFSpeech | CFTimeout)
+            base.playSfx(self.toonUpSfx)
+            if not self.bonusTimer:
+                self.bonusTimer = ToontownTimer.ToontownTimer()
+                self.bonusTimer.posInTopRightCorner()
+            self.bonusTimer.show()
+            self.bonusTimer.countdown(ToontownGlobals.LawbotBossStunTrainingBonusDuration, self.hideBonusTimer)
+        else:
+            self.witnessToon.clearChat()
+            text = TTLocalizer.WitnessToonBonus % (ToontownGlobals.LawbotBossBonusWeightMultiplier, ToontownGlobals.LawbotBossBonusDuration)
+            self.witnessToon.setChatAbsolute(text, CFSpeech | CFTimeout)
+            base.playSfx(self.toonUpSfx)
+            if not self.bonusTimer:
+                self.bonusTimer = ToontownTimer.ToontownTimer()
+                self.bonusTimer.posInTopRightCorner()
+            self.bonusTimer.show()
+            self.bonusTimer.countdown(ToontownGlobals.LawbotBossBonusDuration, self.hideBonusTimer)
 
     def setAttackCode(self, attackCode, avId = 0):
         DistributedBossCog.DistributedBossCog.setAttackCode(self, attackCode, avId)

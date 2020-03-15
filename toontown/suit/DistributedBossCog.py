@@ -139,7 +139,6 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.cleanupFlash()
         self.disableLocalToonSimpleCollisions()
         self.ignoreAll()
-        self.bossHealthBar.cleanUp()
         return
 
     def delete(self):

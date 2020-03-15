@@ -2,6 +2,7 @@
 cd "../astron/"
 title Toontown Stride Astron
 
-
+:start
 astrond --loglevel info config/cluster.yml
-pause
+PAUSE
+goto start

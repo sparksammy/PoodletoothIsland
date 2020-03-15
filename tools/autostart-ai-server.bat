@@ -16,7 +16,6 @@ set DISTRICT_NAME=Nuttyriver
 set BASE_CHANNEL=401000000
 
 :main
-cls
 
 %PYTHON_PATH% ^
 	-m toontown.ai.ServiceStart ^
@@ -26,4 +25,5 @@ cls
 	--astron-ip %ASTRON_IP% ^
 	--eventlogger-ip %EVENTLOGGER_IP% ^
 	--district-name "%DISTRICT_NAME%"
+PAUSE
 goto main

@@ -110,3 +110,6 @@ want-pstats 0
 # Temporary:
 smooth-lag 0.4
 want-old-fireworks #t
+
+# Cog Boss Trainings:
+want-scale-practice #f
