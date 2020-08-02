@@ -1,17 +1,18 @@
-<img src="https://raw.githubusercontent.com/NormalNed/ToontownStride/master/resources/phase_3/etc/icon.ico" align="right" width="200"/>
+<img src="https://raw.githubusercontent.com/sparksammy/PoodletoothIsland/master/resources/phase_3/etc/icon.ico" align="right" width="200"/>
 
-# Toontown Stride
-September build of Toontown Stride, that just works.
+# Poodletooth Island Rewritten
+A rewrite of the classic Poodletooth Island, with added features.
 
 # ❓ What is Toontown Stride
-Toontown Stride is a Community Focused Toontown Server. We are going to keep up this tradition finishing and polishing Toontown Stride for the community.
+Toontown Stride is a Community Focused Toontown Server, and Poodletooth Island is a mod of Toontown Stride.
+
 # 🔨 Setting Up
 
 Support is currently being worked on for MacOS and Non Arch Based Linux Distros
 ## 💻 Windows
 
 ### Installing Panda
-To get the source running you need to install the [Panda3D](https://github.com/NormalNed/ToontownStride/blob/master/Panda3D-1.11.0.exe) located in this repo.
+To get the source running you need to install the [Panda3D](https://github.com/sparksammy/PoodletoothIsland/blob/master/Panda3D-1.11.0.exe?raw=true) located in this repo.
 
 ### Installing Pip Dependencies
 The next part is to get our Dependencies. To get them open a Command Prompt Window inside of the Toontown Stride folder and run
