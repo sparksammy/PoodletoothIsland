@@ -3,7 +3,7 @@
 # Poodletooth Island Rewritten
 A rewrite of the classic Poodletooth Island, with added features.
 
-# ❓ What is Toontown Stride
+# ❓ What is Toontown Stride, and what is Poodletooth Island?
 Toontown Stride is a Community Focused Toontown Server, and Poodletooth Island is a mod of Toontown Stride.
 
 # 🔨 Setting Up
@@ -49,7 +49,7 @@ The next part is to get our Dependencies. Open a Terminal inside of the Stride P
 pip2.7 install -r requirements.txt
 ```
 
-### Installing "our" Panda 3D
+### Installing ToontownOS' Panda 3D
 We use a version of Astron Panda3D that is upstream code from the main repo. To set it up follow these instructions
 
 ```bash
@@ -65,7 +65,7 @@ Now run the [Start.sh](Start.sh) file to launch the game.
 
 # 📝 Notice
 
-This repository contains code derived from the [BigNed repository.](https://github.com/BigNed/ToontownStride)
+This repository contains code derived from the [ToontownOS repository.](https://github.com/ToontownOS/ToontownStride), which is derived from the [BigNed repository.](https://github.com/BigNed/ToontownStride)
 
 BigNed is operated by rocketprogrammer, toonjoey, Jeeperpretzel, and EliasTDev.
 
